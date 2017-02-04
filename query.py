@@ -22,12 +22,27 @@ init_app()
 
 # 1. What is the datatype of the returned value of
 # ``Brand.query.filter_by(name='Ford')``?
+# It's a query object, not an actual query yet (we need to add .all() or .one(),
+# etc)
 
 
 
 # 2. In your own words, what is an association table, and what type of
 # relationship (many to one, many to many, one to one, etc.) does an
 # association table manage?
+# An association table is used to manage many to many relationships, or really,
+# two one-to-many relationships.  We use the term to distinguish it from a
+# middle table, which has meaningful data fields, in addition to the foreign
+# keys.  We would use a middle table to store book comments by users, because a
+# book can have many comments and a user can make many comments, and a user can
+# make multiple comments for the same book.  So the middle table stores
+# commentid, userid, bookid, comment.
+# An association table is used to connect two other tables that don't really
+# have a direct relationship, and would be used when we don't have meaningful
+# data to store, aside from the foreign keys.  Ex: a book can have many genres,
+# and a genre can have many books, but we don't really have any other
+# information to store about bookgenres.  We would have an association table,
+# with bookgenreid, bookid, genreid, and that's it.
 
 
 
