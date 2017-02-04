@@ -79,8 +79,6 @@ q7 = db.session.query(Brand).filter((Brand.discontinued.isnot(None)) |
 # Get any model whose brand_id is not "for."
 q8 = db.session.query(Model).join(Brand).filter(Brand.brand_id != 'for').all()
 
-
-
 # -------------------------------------------------------------------
 # Part 4: Write Functions
 
@@ -89,26 +87,40 @@ def get_model_info(year):
     """Takes in a year and prints out each model name, brand name, and brand
     headquarters for that year using only ONE database query."""
 
-    pass
+    # yearcars = db.session.query(Model).join(Brand).filter(Model.year == year).all()
+    # for model, brand in yearcars:
+    #     print model.name, brand.name, brand.headquarters
+    yearcars = Model.query.options(db.joinedload('brand')).filter_by(year=year).all()
+
+    for yearcar in yearcars:
+        print "Model: %s \nBrand: %s\nHeadquarters: %s\n" % (yearcar.name,
+                                                             yearcar.brand.name,
+                                                             yearcar.brand.headquarters
+                                                             )
 
 
 def get_brands_summary():
     """Prints out each brand name and each model name with year for that brand
     using only ONE database query."""
 
-    pass
+    brndmdls = Brand.query.options(db.joinedload('model')).all()
+
+    for brnd in brndmdls:
+        print "Brand: %s" % (brnd.name)
+        for mdl in brnd.model:
+            print "      Model: %s\n      Year: %s\n" % (mdl.name, mdl.year)
 
 
 def search_brands_by_name(mystr):
     """Returns all Brand objects corresponding to brands whose names include
     the given string."""
 
-    pass
+    return Brand.query.filter(Brand.name.like('%'+mystr+'%')).all()
 
 
 def get_models_between(start_year, end_year):
     """Returns all Model objects corresponding to models made between
     start_year (inclusive) and end_year (exclusive)."""
 
-    pass
-
+    return Model.query.filter(Model.year >= start_year,
+                              Model.year < end_year).all()
