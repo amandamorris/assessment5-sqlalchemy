@@ -59,7 +59,7 @@ q2 = db.session.query(Model).filter(Model.name == "Corvette",
                                     Model.brand_id == "che").all()
 
 # Get all models that are older than 1960.
-q3 = db.session.query(Model).filter(Model.year > 1960).all()
+q3 = db.session.query(Model).filter(Model.year < 1960).all()
 
 # Get all brands that were founded after 1920.
 q4 = db.session.query(Brand).filter(Brand.founded > 1920).all()
